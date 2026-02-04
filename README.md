@@ -56,7 +56,7 @@ This is a simple web app that converts certain letters from Latin script to a ta
 ### v0: Proof of Concept ✅
 * **Goal:** Verify that a single Latin character can be swapped for a Ge'ez character.
 * **Capability:** The user can type "a" and see "አ" on the screen.
-### v1: Complete Vowel Support🟢
+### v1: Complete Vowel Support✅️
 * **Goal:** Support the primary vowel sounds in the Amharic alphabet.
 * **Capability:** The user can generate the 7 basic vowel forms (ኧ, ኡ, ኢ, አ, ኤ, እ, ኦ).
 ### v2: Full Character Set (All Letters)
