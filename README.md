@@ -1,7 +1,6 @@
 # Transliteration App (v0)
 ## What it does
-This is a simple web app that converts certain letters from Latin script to a target script (currently only "A" → "አ").
-
+This is a simple web app that converts certain letters from Latin script to a target script (currently Amharic vowels). 
 ## Difference Between Translation and Transliteration
 - **Translation**: Converts the **meaning** of text from one language to another.  
   - Example: "Hello" -> "ሰላም"
