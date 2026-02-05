@@ -47,15 +47,15 @@ This is a simple web app that converts certain letters from Latin script to a ta
 
 ## Roadmap
 
-✅️- fullyDone 🟢-done but not fully  
+   ✅️ fullyDone | 🟢 done but not fully  
 
 ### v0: Proof of Concept ✅
 * **Goal:** Verify that a single Latin character can be swapped for a Ge'ez character.
 * **Capability:** The user can type "a" and see "አ" on the screen.
-### v1: Complete Vowel Support✅️
+### v1: Complete Vowel Support ✅️
 * **Goal:** Support the primary vowel sounds in the Amharic alphabet.
 * **Capability:** The user can generate the 7 basic vowel forms (ኧ, ኡ, ኢ, አ, ኤ, እ, ኦ).
-### v2: Full Character Set (All Letters)
+### v2: Full Character Set (All Letters)✅️
 * **Goal:** Expand the logic to include all consonant-vowel combinations (መ, ለ, ሐ, ሰ, etc.).
 * **Capability:** The application can handle the entire Amharic "Fidel" syllabus using a standardized mapping system.
 ### v3: Multi-letter Word Processing
@@ -64,6 +64,6 @@ This is a simple web app that converts certain letters from Latin script to a ta
 ### v4: Sentence support
 * **Goal:** Process multiple words 
 * **Capability:** The user can type full sentences. 
-### v5: Polished UI
+### v5: Polished UI 🟢
 * **Goal:** Transform the tool into a professional-grade web application.
 * **Capability:** A polished interface featuring a copy-to-clipboard button, and mobile responsiveness.
