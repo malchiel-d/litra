@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Transliterate</title>
@@ -77,9 +78,11 @@
       min-height: 24px;
     }
   </style>
+  
 </head>
 
 <body>
+  
   <div class="container">
     <h1>Transliterate: English to Amharic</h1>
     <input id="inpt" placeholder="Enter text…" />
@@ -90,8 +93,7 @@
     </div>
   </div>
   
-
- 
+  
   <script>
   
     function clicked() {
@@ -100,38 +102,31 @@
       let outp = document.getElementById("outp");
       //reset color
       outp.style.color = "";
-
-      if(text === ""){
-        outp.innerHTML = "You DID NOT WRITE ANYTHING!!!"
+              
+      const dictionary = {
+        "ee":"ኧ",
+        "u":"ኡ",
+        "i":"ኢ",
+        "a":"አ",
+        "ei":"ኤ",
+        "e":"እ",
+        "o":"ኦ",
+      };
+      
+      
+      let translate = dictionary[text];
+      
+      if(translate){
+        outp.innerHTML = translate;
+      }else{
+        outp.innerHTML = "NOT FOUND!!!";
         outp.style.color = "red";
       }
-      else if(text === "ee" ){
-        outp.innerHTML = "ኧ";
-      }
-      else if(text === "u" ) {
-        outp.innerHTML = "ኡ";
-      }
-      else if(text === "i" ) {
-        outp.innerHTML = "ኢ";
-      }
-      else if(text === "a" ) {
-        outp.innerHTML = "ኣ";
-      }
-      else if(text === "ei" ) {
-        outp.innerHTML = "ኤ";
-      }
-      else if(text === "e" ) {
-        outp.innerHTML = "እ";
-      }
-      else if(text === "o" ) {
-        outp.innerHTML = "ኦ";
-      }
-      else {
-        outp.innerHTML = 'Only vowels are supported for now.';
-      }
+     
       
       //reset input
       inpt.value = "";
+      
     }
   
   </script>
