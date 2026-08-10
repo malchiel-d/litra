@@ -1,38 +1,593 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <title>Litra</title>
-    
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>English to Amharic Transliteration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+Ethiopic:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family:
+          "Inter",
+          system-ui,
+          -apple-system,
+          sans-serif;
+      }
+      .amharic-text {
+        font-family: "Noto Sans Ethiopic", "Inter", sans-serif;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col selection:bg-amber-500/30 selection:text-amber-200"
+  >
+    <header class="border-b border-zinc-800/80 px-4 py-4 sm:px-8">
+      <div class="max-w-5xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="amharic-text text-2xl font-bold text-amber-500">አ</span>
+          <h1 class="text-lg font-medium tracking-tight text-zinc-200">
+            English to Amharic Transliteration
+          </h1>
+        </div>
+        <button
+          id="toggleDictBtn"
+          class="text-xs font-medium px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:border-zinc-700 transition-colors"
+        >
+          Show Dictionary
+        </button>
+      </div>
+    </header>
 
-<body>
-  
-  <div class="container">
-    <h1>Transliterate: English to Amharic</h1>
-    <input 
-      type="text"
-      id="userInput" 
-      class="userInput"
-      placeholder="Enter text…" 
-      autocomplete="off" 
-      oninput="this.value = this.value.replace(/[^a-zA-Z]/g, '')"
-      />
-    
-   <button onclick="clicked()">Convert</button>
+    <main
+      class="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-8 flex flex-col gap-6"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1">
+        <div
+          class="flex flex-col rounded-xl bg-zinc-900/90 border border-zinc-800/80 overflow-hidden focus-within:border-amber-500/50 transition-colors"
+        >
+          <div
+            class="flex items-center justify-between px-4 py-3 border-b border-zinc-800/60 bg-zinc-900/40"
+          >
+            <span
+              class="text-xs font-semibold tracking-wider text-zinc-400 uppercase"
+              >English Phonetics</span
+            >
+            <button
+              id="clearBtn"
+              class="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+            >
+              Clear
+            </button>
+          </div>
+          <textarea
+            id="englishInput"
+            placeholder="Type English phonetics here (e.g., selam, amarik, chhe, ttee)..."
+            class="w-full h-48 md:h-72 p-4 bg-transparent resize-none focus:outline-none text-zinc-200 placeholder-zinc-600 text-base leading-relaxed"
+            spellcheck="false"
+            autofocus
+          ></textarea>
+        </div>
 
+        <div
+          class="flex flex-col rounded-xl bg-zinc-900/90 border border-zinc-800/80 overflow-hidden"
+        >
+          <div
+            class="flex items-center justify-between px-4 py-3 border-b border-zinc-800/60 bg-zinc-900/40"
+          >
+            <span
+              class="text-xs font-semibold tracking-wider text-zinc-400 uppercase"
+              >Amharic Script</span
+            >
+            <button
+              id="copyBtn"
+              class="text-xs font-medium text-amber-500 hover:text-amber-400 transition-colors flex items-center gap-1"
+            >
+              <span>Copy</span>
+            </button>
+          </div>
+          <div
+            id="amharicOutput"
+            class="amharic-text w-full h-48 md:h-72 p-4 bg-transparent overflow-y-auto text-zinc-100 text-2xl leading-relaxed whitespace-pre-wrap select-all"
+          ></div>
+        </div>
+      </div>
 
-    <div class="result">
-      <strong>Result:</strong>
-      <p id="outp">result goes here</p>
-    </div>
-  </div>
-  
-  
-  
-   <script src="script.js"></script>
-</body>
+      <div
+        id="toast"
+        class="fixed bottom-6 right-6 bg-amber-500 text-zinc-950 px-4 py-2 rounded-lg font-medium text-sm shadow-lg opacity-0 pointer-events-none transition-opacity duration-200"
+      >
+        Copied to clipboard!
+      </div>
+
+      <section
+        id="dictionarySection"
+        class="hidden rounded-xl bg-zinc-900/90 border border-zinc-800/80 p-4 sm:p-6 transition-all"
+      >
+        <h2
+          class="text-sm font-semibold text-zinc-300 uppercase tracking-wider mb-4"
+        >
+          Dictionary Reference
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-zinc-300 border-collapse">
+            <thead>
+              <tr class="border-b border-zinc-800 text-zinc-400 font-medium">
+                <th class="py-2 px-3">Group</th>
+                <th class="py-2 px-3">1st (e/a/ee)</th>
+                <th class="py-2 px-3">2nd (u)</th>
+                <th class="py-2 px-3">3rd (i)</th>
+                <th class="py-2 px-3">4th (a)</th>
+                <th class="py-2 px-3">5th (e/ee)</th>
+                <th class="py-2 px-3">6th (-)</th>
+                <th class="py-2 px-3">7th (o)</th>
+              </tr>
+            </thead>
+            <tbody
+              id="dictTableBody"
+              class="divide-y divide-zinc-800/50"
+            ></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const DICT_ROWS = [
+        {
+          group: "VOWELS",
+          items: [
+            ["ኧ", "ee"],
+            ["ኡ", "u"],
+            ["ኢ", "i"],
+            ["አ", "a"],
+            ["ኤ", "ei"],
+            ["እ", "e"],
+            ["ኦ", "o"],
+          ],
+        },
+        {
+          group: "H",
+          items: [
+            ["ሀ", "ha"],
+            ["ሁ", "hu"],
+            ["ሂ", "hi"],
+            ["ሃ", "haa"],
+            ["ሄ", "he"],
+            ["ህ", "h"],
+            ["ሆ", "ho"],
+          ],
+        },
+        {
+          group: "L",
+          items: [
+            ["ለ", "le"],
+            ["ሉ", "lu"],
+            ["ሊ", "li"],
+            ["ላ", "la"],
+            ["ሌ", "lee"],
+            ["ል", "l"],
+            ["ሎ", "lo"],
+          ],
+        },
+        {
+          group: "M",
+          items: [
+            ["መ", "me"],
+            ["ሙ", "mu"],
+            ["ሚ", "mi"],
+            ["ማ", "ma"],
+            ["ሜ", "mee"],
+            ["ም", "m"],
+            ["ሞ", "mo"],
+          ],
+        },
+        {
+          group: "R",
+          items: [
+            ["ረ", "re"],
+            ["ሩ", "ru"],
+            ["ሪ", "ri"],
+            ["ራ", "ra"],
+            ["ሬ", "ree"],
+            ["ር", "r"],
+            ["ሮ", "ro"],
+          ],
+        },
+        {
+          group: "S",
+          items: [
+            ["ሰ", "se"],
+            ["ሱ", "su"],
+            ["ሲ", "si"],
+            ["ሳ", "sa"],
+            ["ሴ", "see"],
+            ["ስ", "s"],
+            ["ሶ", "so"],
+          ],
+        },
+        {
+          group: "SH",
+          items: [
+            ["ሸ", "she"],
+            ["ሹ", "shu"],
+            ["ሺ", "shi"],
+            ["ሻ", "sha"],
+            ["ሼ", "shee"],
+            ["ሽ", "sh"],
+            ["ሾ", "sho"],
+          ],
+        },
+        {
+          group: "Q",
+          items: [
+            ["ቀ", "qe"],
+            ["ቁ", "qu"],
+            ["ቂ", "qi"],
+            ["ቃ", "qa"],
+            ["ቄ", "qee"],
+            ["ቅ", "q"],
+            ["ቆ", "qo"],
+          ],
+        },
+        {
+          group: "B",
+          items: [
+            ["በ", "be"],
+            ["ቡ", "bu"],
+            ["ቢ", "bi"],
+            ["ባ", "ba"],
+            ["ቤ", "bee"],
+            ["ብ", "b"],
+            ["ቦ", "bo"],
+          ],
+        },
+        {
+          group: "T",
+          items: [
+            ["ተ", "te"],
+            ["ቱ", "tu"],
+            ["ቲ", "ti"],
+            ["ታ", "ta"],
+            ["ቴ", "tee"],
+            ["ት", "t"],
+            ["ቶ", "to"],
+          ],
+        },
+        {
+          group: "CH",
+          items: [
+            ["ቸ", "che"],
+            ["ቹ", "chu"],
+            ["ቺ", "chi"],
+            ["ቻ", "cha"],
+            ["ቼ", "chee"],
+            ["ች", "ch"],
+            ["ቾ", "cho"],
+          ],
+        },
+        {
+          group: "N",
+          items: [
+            ["ነ", "ne"],
+            ["ኑ", "nu"],
+            ["ኒ", "ni"],
+            ["ና", "na"],
+            ["ኔ", "nee"],
+            ["ን", "n"],
+            ["ኖ", "no"],
+          ],
+        },
+        {
+          group: "NG",
+          items: [
+            ["ኘ", "nge"],
+            ["ኙ", "ngu"],
+            ["ኚ", "ngi"],
+            ["ኛ", "nga"],
+            ["ኜ", "ngee"],
+            ["ኝ", "ng"],
+            ["ኞ", "ngo"],
+          ],
+        },
+        {
+          group: "K",
+          items: [
+            ["ከ", "ke"],
+            ["ኩ", "ku"],
+            ["ኪ", "ki"],
+            ["ካ", "ka"],
+            ["ኬ", "kee"],
+            ["ክ", "k"],
+            ["ኮ", "ko"],
+          ],
+        },
+        { group: "HEE", items: [["ኸ", "hee"]] },
+        {
+          group: "W",
+          items: [
+            ["ወ", "we"],
+            ["ዉ", "wu"],
+            ["ዊ", "wi"],
+            ["ዋ", "wa"],
+            ["ዌ", "wee"],
+            ["ው", "w"],
+            ["ዎ", "wo"],
+          ],
+        },
+        {
+          group: "Z",
+          items: [
+            ["ዘ", "ze"],
+            ["ዙ", "zu"],
+            ["ዚ", "zi"],
+            ["ዛ", "za"],
+            ["ዜ", "zee"],
+            ["ዝ", "z"],
+            ["ዞ", "zo"],
+          ],
+        },
+        {
+          group: "ZZ",
+          items: [
+            ["ዠ", "zze"],
+            ["ዡ", "zzu"],
+            ["ዢ", "zzi"],
+            ["ዣ", "zza"],
+            ["ዤ", "zzee"],
+            ["ዥ", "zz"],
+            ["ዦ", "zzo"],
+          ],
+        },
+        {
+          group: "Y",
+          items: [
+            ["የ", "ye"],
+            ["ዩ", "yu"],
+            ["ዪ", "yi"],
+            ["ያ", "ya"],
+            ["ዬ", "yee"],
+            ["ይ", "y"],
+            ["ዮ", "yo"],
+          ],
+        },
+        {
+          group: "D",
+          items: [
+            ["ደ", "de"],
+            ["ዱ", "du"],
+            ["ዲ", "di"],
+            ["ዳ", "da"],
+            ["ዴ", "dee"],
+            ["ድ", "d"],
+            ["ዶ", "do"],
+          ],
+        },
+        {
+          group: "J",
+          items: [
+            ["ጀ", "je"],
+            ["ጁ", "ju"],
+            ["ጂ", "ji"],
+            ["ጃ", "ja"],
+            ["ጄ", "jee"],
+            ["ጅ", "j"],
+            ["ጆ", "jo"],
+          ],
+        },
+        {
+          group: "G",
+          items: [
+            ["ገ", "ge"],
+            ["ጉ", "gu"],
+            ["ጊ", "gi"],
+            ["ጋ", "ga"],
+            ["ጌ", "gee"],
+            ["ግ", "g"],
+            ["ጎ", "go"],
+          ],
+        },
+        {
+          group: "TT",
+          items: [
+            ["ጠ", "tte"],
+            ["ጡ", "ttu"],
+            ["ጢ", "tti"],
+            ["ጣ", "tta"],
+            ["ጤ", "ttee"],
+            ["ጥ", "tt"],
+            ["ጦ", "tto"],
+          ],
+        },
+        {
+          group: "CHH",
+          items: [
+            ["ጨ", "chhe"],
+            ["ጩ", "chhu"],
+            ["ጪ", "chhi"],
+            ["ጫ", "chha"],
+            ["ጬ", "chhee"],
+            ["ጭ", "chh"],
+            ["ጮ", "chho"],
+          ],
+        },
+        {
+          group: "PP",
+          items: [
+            ["ጰ", "ppe"],
+            ["ጱ", "ppu"],
+            ["ጲ", "ppi"],
+            ["ጳ", "ppa"],
+            ["ጴ", "ppee"],
+            ["ጵ", "pp"],
+            ["ጶ", "ppo"],
+          ],
+        },
+        {
+          group: "TS",
+          items: [
+            ["ፀ", "tse"],
+            ["ፁ", "tsu"],
+            ["ፂ", "tsi"],
+            ["ፃ", "tsa"],
+            ["ፄ", "tsee"],
+            ["ፅ", "ts"],
+            ["ፆ", "tso"],
+          ],
+        },
+        {
+          group: "F",
+          items: [
+            ["ፈ", "fe"],
+            ["ፉ", "fu"],
+            ["ፊ", "fi"],
+            ["ፋ", "fa"],
+            ["ፌ", "fee"],
+            ["ፍ", "f"],
+            ["ፎ", "fo"],
+          ],
+        },
+        {
+          group: "P",
+          items: [
+            ["ፐ", "pe"],
+            ["ፑ", "pu"],
+            ["ፒ", "pi"],
+            ["ፓ", "pa"],
+            ["ፔ", "pee"],
+            ["ፕ", "p"],
+            ["ፖ", "po"],
+          ],
+        },
+        {
+          group: "V",
+          items: [
+            ["ቨ", "ve"],
+            ["ቩ", "vu"],
+            ["ቪ", "vi"],
+            ["ቫ", "va"],
+            ["ቬ", "vee"],
+            ["ቭ", "v"],
+            ["ቮ", "vo"],
+          ],
+        },
+      ];
+
+      const LOOKUP_MAP = {};
+      DICT_ROWS.forEach((row) => {
+        row.items.forEach(([glyph, phonetic]) => {
+          if (phonetic) {
+            LOOKUP_MAP[phonetic.toLowerCase()] = glyph;
+          }
+        });
+      });
+
+      const SORTED_KEYS = Object.keys(LOOKUP_MAP).sort(
+        (a, b) => b.length - a.length,
+      );
+
+      function transliterate(text) {
+        let result = "";
+        let i = 0;
+        while (i < text.length) {
+          let matched = false;
+          const remaining = text.slice(i).toLowerCase();
+
+          for (const key of SORTED_KEYS) {
+            if (remaining.startsWith(key)) {
+              result += LOOKUP_MAP[key];
+              i += key.length;
+              matched = true;
+              break;
+            }
+          }
+
+          if (!matched) {
+            result += text[i];
+            i++;
+          }
+        }
+        return result;
+      }
+
+      const englishInput = document.getElementById("englishInput");
+      const amharicOutput = document.getElementById("amharicOutput");
+      const clearBtn = document.getElementById("clearBtn");
+      const copyBtn = document.getElementById("copyBtn");
+      const toggleDictBtn = document.getElementById("toggleDictBtn");
+      const dictionarySection = document.getElementById("dictionarySection");
+      const dictTableBody = document.getElementById("dictTableBody");
+      const toast = document.getElementById("toast");
+
+      englishInput.addEventListener("input", () => {
+        amharicOutput.textContent = transliterate(englishInput.value);
+      });
+
+      clearBtn.addEventListener("click", () => {
+        englishInput.value = "";
+        amharicOutput.textContent = "";
+        englishInput.focus();
+      });
+
+      copyBtn.addEventListener("click", () => {
+        const textToCopy = amharicOutput.textContent;
+        if (!textToCopy) return;
+
+        const tempTextArea = document.createElement("textarea");
+        tempTextArea.value = textToCopy;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+
+        try {
+          document.execCommand("copy");
+          showToast();
+        } catch (err) {
+          console.error("Copy failed:", err);
+        } finally {
+          document.body.removeChild(tempTextArea);
+        }
+      });
+
+      function showToast() {
+        toast.classList.remove("opacity-0", "pointer-events-none");
+        toast.classList.add("opacity-100");
+        setTimeout(() => {
+          toast.classList.remove("opacity-100");
+          toast.classList.add("opacity-0", "pointer-events-none");
+        }, 2000);
+      }
+
+      toggleDictBtn.addEventListener("click", () => {
+        const isHidden = dictionarySection.classList.contains("hidden");
+        if (isHidden) {
+          dictionarySection.classList.remove("hidden");
+          toggleDictBtn.textContent = "Hide Dictionary";
+        } else {
+          dictionarySection.classList.add("hidden");
+          toggleDictBtn.textContent = "Show Dictionary";
+        }
+      });
+
+      DICT_ROWS.forEach((row) => {
+        const tr = document.createElement("tr");
+
+        let html = `<td class="py-2 px-3 font-semibold text-amber-500">${row.group}</td>`;
+        for (let i = 0; i < 7; i++) {
+          if (row.items[i]) {
+            const [glyph, phonetic] = row.items[i];
+            html += `<td class="py-2 px-3"><span class="amharic-text text-sm font-semibold text-zinc-100">${glyph}</span> <span class="text-zinc-500">(${phonetic})</span></td>`;
+          } else {
+            html += `<td class="py-2 px-3 text-zinc-700">-</td>`;
+          }
+        }
+        tr.innerHTML = html;
+        dictTableBody.appendChild(tr);
+      });
+    </script>
+  </body>
 </html>
